@@ -1,0 +1,87 @@
+/******
+Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
+Example 1:
+
+Input: intervals = [[1,3],[2,6],[8,10],[15,18]]
+Output: [[1,6],[8,10],[15,18]]
+Explanation: Since intervals [1,3] and [2,6] overlaps, merge them into [1,6].
+Example 2:
+
+Input: intervals = [[1,4],[4,5]]
+Output: [[1,5]]
+Explanation: Intervals [1,4] and [4,5] are considered overlapping.
+******/
+
+
+
+public class MergeInterval {
+	static class Inrvl {
+
+		int startTime;
+		int endTime;
+
+		Inrvl(int startTime, int endTime) {
+
+			this.startTime = startTime;
+			this.endTime = endTime;
+
+		}
+
+	}
+
+	static class MySort implements Comparator<Inrvl> {
+		public int compare(Inrvl obj1, Inrvl obj2) {
+
+			return obj1.startTime - obj2.startTime;
+
+		}
+
+	}
+
+	public static void main(String args[]) {
+
+/*		Inrvl inrvl1 = new Inrvl(1, 9);
+		Inrvl inrvl2 = new Inrvl(2, 4);
+		Inrvl inrvl3 = new Inrvl(4, 7);
+		Inrvl inrvl4 = new Inrvl(6, 8);
+		Inrvl inrvl5 = new Inrvl(12, 16);*/
+		
+		Inrvl inrvl1 = new Inrvl(1, 3);
+		Inrvl inrvl2 = new Inrvl(2, 6);
+		Inrvl inrvl3 = new Inrvl(8, 10);
+		Inrvl inrvl4 = new Inrvl(15, 18);
+
+
+
+		ArrayList<Inrvl> InrvlList = new ArrayList<Inrvl>();
+		InrvlList.add(inrvl1);
+		InrvlList.add(inrvl2);
+		InrvlList.add(inrvl3);
+		InrvlList.add(inrvl4);
+		//InrvlList.add(inrvl5);
+
+		ArrayList<Inrvl> resultInrvlList = new ArrayList<Inrvl>();
+		Collections.sort(InrvlList, new MySort());
+		  Inrvl t =  InrvlList.get(0);
+		 
+		    for(int i=1; i<InrvlList.size(); i++){
+		    	Inrvl c = InrvlList.get(i);
+		        if(c.startTime <= t.endTime){
+		        //	t.startTime=Math.min(t.startTime, c.startTime);
+		            t.endTime = Math.max(t.endTime, c.endTime);
+		        }else{
+		        	resultInrvlList.add(t);
+		            t = c;
+		        }
+		    }
+		 
+		    resultInrvlList.add(t);
+		
+
+		for (int j = 0; j < resultInrvlList.size(); j++) {
+			System.out.println(
+					" Merged Intervals : " + resultInrvlList.get(j).startTime + " " + resultInrvlList.get(j).endTime);
+		}
+
+	}
+}
