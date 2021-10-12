@@ -1,0 +1,74 @@
+package com.arrays;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
+/***
+***** https://leetcode.com/problems/meeting-rooms-ii/solution/
+****/
+public class MeetingRoom2 {
+
+	static class Intervals {
+		int start;
+		int end;
+
+		Intervals(int t1, int t2) {
+			this.start = t1;
+			this.end = t2;
+		}
+	}
+
+	static class myComparator implements Comparator<Intervals> {
+
+		@Override
+		public int compare(Intervals arg0, Intervals arg1) {
+
+			return arg0.start - arg1.start;
+		}
+
+	}
+
+	public static void main(String[] args) {
+
+		Intervals int1 = new Intervals(1, 3);
+		Intervals int2 = new Intervals(2, 16);
+		Intervals int3 = new Intervals(5, 10);
+		Intervals int4 = new Intervals(15, 18);
+
+		List<Intervals> intervalList = new ArrayList<Intervals>();
+		intervalList.add(int1);
+		intervalList.add(int2);
+		intervalList.add(int3);
+		intervalList.add(int4);
+		
+		
+
+		Collections.sort(intervalList, new myComparator());
+		
+		// this is another way for sort the intervals with start time 
+		//Interval[] intervalsArr = (Interval[]) intervalList.toArray();
+		//Arrays.sort(intervalsArr, (a, b)->a.startTime - b.startTime);
+
+		PriorityQueue<Intervals> minHeap = new PriorityQueue<Intervals>((a, b) -> a.end - b.end);
+		minHeap.add(intervalList.get(0));
+
+		for (int i = 1; i < intervalList.size(); i++) {
+			Intervals current = intervalList.get(i);
+			Intervals earliest = minHeap.remove();
+
+			if (current.start >= earliest.end) {
+				earliest.end = current.end;
+			} else {
+				minHeap.add(current);
+
+			}
+			minHeap.add(earliest);
+		}
+	
+		System.out.println(" Meeting Room " + minHeap.size());
+	}
+
+}
