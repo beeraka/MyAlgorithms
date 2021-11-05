@@ -1,0 +1,75 @@
+package com.dp;
+
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Set;
+
+public class Wordladder1 {
+
+	public static void main(String[] args) {
+
+		String beginWord = "hit";
+		String endWord = "cog";
+		Set<String> wordDict = new HashSet<String>();
+		wordDict.add("hot");
+		wordDict.add("dot");
+		wordDict.add("dog");
+		wordDict.add("lot");
+		wordDict.add("log");
+		wordDict.add("cog");
+		Wordladder wordladder = new Wordladder();
+		System.out.println("RESULTS : " + wordladder.ladderLength(beginWord, endWord, wordDict));
+	}
+
+	class WordNode {
+		String word;
+		int numSteps;
+
+		public WordNode(String word, int numSteps) {
+			this.word = word;
+			this.numSteps = numSteps;
+		}
+	}
+
+	private int ladderLength(String beginWord, String endWord, Set<String> wordDict) {
+
+		Queue<WordNode> q = new LinkedList<WordNode>();
+		q.add(new WordNode(beginWord, 1));
+
+		while (!q.isEmpty()) {
+
+			WordNode node = q.poll();
+			String first = node.word;
+
+			if (first.equals(endWord)) {
+				return node.numSteps;
+			}
+
+			char[] chaArr = first.toCharArray();
+
+			for (int i = 0; i < chaArr.length; i++) {
+				for (char c = 'a'; c <= 'z'; c++) {
+					char temp = chaArr[i];
+					if (chaArr[i] != c) {
+
+						chaArr[i] = c;
+					}
+					String newWord = new String(chaArr);
+
+					if (wordDict.contains(newWord)) {
+						q.add(new WordNode(newWord, node.numSteps + 1));
+						wordDict.remove(newWord);
+					}
+					chaArr[i] = temp;
+				}
+
+			}
+
+		}
+
+		return 0;
+
+	}
+
+}
